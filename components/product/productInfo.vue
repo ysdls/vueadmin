@@ -16,13 +16,15 @@
             required
             color="grey darken-4"
             class="headline marginText"
+            v-model="producName"
+            @change="productNameFunc"
         ></v-text-field>
-        <div class="d-flex flex-column ">
+        <!-- <div class="d-flex flex-column ">
             <div class="d-flex flex-column caption">상품정보제공공시</div>
             <div class="d-flex flex-column caption">
                     <v-checkbox label="설정함" ></v-checkbox>
             </div>
-        </div>
+        </div> -->
         <v-divider></v-divider>
         <div class="d-flex flex-column">
             <div class="d-flex flex-column caption">판매기간설정</div>
@@ -30,7 +32,7 @@
                 <v-checkbox label="설정함" v-model="saleCheck" @click="saleCheckFunc"></v-checkbox>
                 <v-row v-show="saleDate">
                     <v-col cols="12" sm="6" style="text-align:center;">
-                        <v-date-picker locale="ko-kr" v-model="dates" range></v-date-picker>
+                        <v-date-picker locale="ko-kr" v-model="dates" range @change="dateRangeFunc"></v-date-picker>
                     </v-col>
                     <v-col cols="12" sm="6">
                         <v-text-field v-model="dateRangeText" label="판매기간" readonly></v-text-field>
@@ -45,6 +47,7 @@
 export default {
     data() {
         return {
+            producName:"",
             rules: {
                 title: [
                     value => !!value || '최소 2글자 이상 100글자 이하로 적어주세요',
@@ -60,9 +63,21 @@ export default {
     methods: {
         saleCheckFunc() {
             if ( this.saleCheck === true ) {
+                this.$emit("date-range-func-parent", this.dates)
                 return this.saleDate = true
             } else {
+                this.$emit("date-range-func-parent", null)
                 return this.saleDate = false
+            }
+        },
+        productNameFunc() {
+            this.$emit("product-name-func-parent", this.producName)
+        },
+        dateRangeFunc() {
+            if ( this.saleCheck === true ) {
+                this.$emit("date-range-func-parent", this.dates)
+            } else {
+                this.$emit("date-range-func-parent", null)
             }
         }
     },

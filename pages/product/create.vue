@@ -1,5 +1,7 @@
 <template>
   <v-container fluid>
+
+    
     <v-row align="center">
       <v-col class="d-flex" cols="12" sm="3">
         <v-select
@@ -36,7 +38,7 @@
         ></v-select>
       </v-col>
     </v-row>
-    <v-row align-center>
+    <v-row>
 
     </v-row>
     <v-row align="center">

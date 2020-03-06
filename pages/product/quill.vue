@@ -21,7 +21,7 @@
           modules: {
             toolbar: [
               ['bold', 'italic', 'underline', 'strike'],
-              ['blockquote', 'code-block']
+              ['blockquote', 'code-block', 'image'],
             ]
           }
         }

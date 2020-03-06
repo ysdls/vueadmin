@@ -14,9 +14,11 @@
                         placeholder="판매가를 숫자로 입력하세요"
                         hint="숫자만 가능합니다"
                         suffix="원"
-                        :rules="rules.price"
+                        :rules="rules.priceCheck"
                         clearable
                         required
+                        v-model="price"
+                        @change="priceFunc"
                     ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
@@ -28,6 +30,8 @@
                         suffix="원"
                         clearable
                         persistentHint
+                        v-model="salePrice"
+                        @change="saleFunc"
                     ></v-text-field>
                 </v-col>
             </v-row>
@@ -36,11 +40,13 @@
                     <v-text-field
                         type="number"
                         label="적립금"
-                        hint=""
+                        hint="적립금 미적용시 입력하지마세요"
                         placeholder="적립금을 입력하세요"
                         suffix="원"
                         clearable
                         persistentHint
+                        v-model="point"
+                        @change="pointFunc"
                     ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
@@ -52,9 +58,19 @@
                         suffix="원"
                         clearable
                         persistentHint
+                        v-model="originPrice"
+                        @change="originPriceFunc"
                     ></v-text-field>
                 </v-col>
             </v-row>
+            <div>
+                <p>부가세</p>
+                <v-radio-group row v-model="tax" @change="taxFunc">
+                <v-radio label="과세" value="tax1"></v-radio>
+                <v-radio label="면세" value="tax2"></v-radio>
+                <v-radio label="영세" value="tax3"></v-radio>
+                </v-radio-group>
+            </div>
         </v-card>
 </template>
 
@@ -63,8 +79,13 @@ export default {
     data() {
         return {
             rules: {
-                price: [value => !!value || '필수입력']
+                priceCheck: [value => !!value || '필수입력']
             },
+            price: "",
+            salePrice: "",
+            point: "",
+            originPrice: "",
+            tax: "tax1"
         }
     },
     filters: {
@@ -74,6 +95,23 @@ export default {
             } else {
                 return value.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,')
             }
+        }
+    },
+    methods: {
+        priceFunc() {
+            this.$emit("price-func-parent", this.price);
+        },
+        saleFunc() {
+            this.$emit("sale-func-parent", this.salePrice);
+        },
+        pointFunc() {
+            this.$emit("point-func-parent", this.point);
+        },
+        originPriceFunc() {
+            this.$emit("origin-price-func-parent", this.originPrice);
+        },
+        taxFunc() {
+            this.$emit("tax-func-parent", this.tax);
         }
     }
 }

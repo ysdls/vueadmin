@@ -16,9 +16,28 @@
                         clearable
                         required
                         persistentHint
+                        v-model="minCount"
+                        @change="minCountFunc"
                     ></v-text-field>
                 </v-col>
             </v-row>
         </v-card>
 </template>
 
+
+
+<script>
+export default {
+    data() {
+        return {
+            minCount:"",
+
+        }
+    },
+    methods: {
+        minCountFunc() {
+            this.$emit('min-count-func-parent', this.minCount)
+        },
+    }
+}
+</script>

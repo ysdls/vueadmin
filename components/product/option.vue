@@ -17,123 +17,58 @@
                             clearable
                             required
                             persistentHint
+                            v-model="optionStockValue"
+                            @change="optionStockValueFunc"
                         ></v-text-field>
                 </v-col>
 
             </v-row>
-            <v-row v-show="optionDetail" >
-                <v-col cols="12" md="2" style="margin-top:9px;">
-                    <v-select
-                    :items="type"
-                    label="옵션타입"
-                    outlined
-                    dense
-                    @change="optionType($event)"
-                    ></v-select>
-                </v-col>
-                <v-col cols="12" md="9" v-show="typeInput">
-                    <v-text-field
-                        label="사용자 입력 옵션명"
-                        placeholder=""
-                        clearable
-                        required
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="12" md="1" v-show="typeInput" style="margin-top:10px;">
-                    <v-btn
-                        color="dark"
-                        dark
-                        small
-                        fab
-                    >
-                        <v-icon>mdi-plus</v-icon>
-                    </v-btn>
-                </v-col>
-                <v-col cols="12" md="2" v-show="typeDefault">
-                    <v-text-field
-                        label="옵션명"
-                        placeholder=""
-                        clearable
-                        required
-                    ></v-text-field>
-                </v-col>
-                <v-col cols="12" md="7" v-show="typeDefault" style="margin-top:6px;">
-                    <v-combobox
-                        v-model="chips"
-                        chips
-                        clearable
-                        multiple
-                        clear-icon
-                        label="입력하세요"
-                        dense
-                    >
-                        <template v-slot:selection="{ attrs, item, select, selected }">
-                            <v-chip
-                                v-bind="attrs"
-                                :input-value="selected"
-                                close
-                                @click="select"
-                                @click:close="remove(item)"
-                            >
-                                <strong>{{ item }}</strong>&nbsp;
-                            </v-chip>
-                        </template>
-                    </v-combobox>
-                </v-col>
-                <v-col cols="12" md="1" v-show="typeDefault" style="margin-top:10px;">
-                    <v-btn
-                        color="dark"
-                        dark
-                        small
-                        fab
-                    >
-                        <v-icon>mdi-plus</v-icon>
-                    </v-btn>
-                </v-col>
-            </v-row>
+            <optionAdd v-show="optionDetail" @option-value-default-parent="optionValueDefaultParent" @option-value-input-parent="optionValueInputParent" />
         </v-card>
 </template>
 
 <script>
+import optionAdd from "~/components/product/optionAdd.vue";
+
 export default {
     data() {
         return {
             optionCheck: false,
-            optionDetail: false,
             optionStock: true,
-            typeInput: false,
-            typeDefault: false,
-            type:[
-                {text: '기본', value: 'D'},
-                {text: '직접입력', value: 'T'}
-            ],
-            chips: []
+            optionDetail: false,  
+            optionStockValue: "",
+            optionValue: "",
+            optionInput: "",
         }
+    },
+    components: {
+        optionAdd,
     },
     methods: {
         optionCheckFunc() {
             if ( this.optionCheck === true ) {
+                this.$emit("option-check-parent", true)
                 this.optionDetail = true
                 this.optionStock = false
             } else {
+                this.$emit("option-check-parent", false)
                 this.optionDetail = false
                 this.optionStock = true
             }
+            
         },
-        optionType(val) {
-            if ( val === 'T' ) {
-                this.typeInput = true
-                this.typeDefault = false
-            } else {
-                this.typeInput = false
-                this.typeDefault = true
-            }
+        optionStockValueFunc() {
+            this.$emit("option-stock-func-parent", this.optionStockValue)
         },
-        remove (item) {
-            console.log(item);
-            this.chips.splice(this.chips.indexOf(item), 1)
-            this.chips = [...this.chips]
+        optionValueDefaultParent(val) {
+            this.optionValue = val
+            this.$emit("option-value-func-parent", this.optionValue)
         },
+        optionValueInputParent(val) {
+            this.optionInput = val
+            this.$emit("option-input-func-parent", this.optionInput)
+        }
+ 
     }
     
 }
