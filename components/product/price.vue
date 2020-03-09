@@ -66,9 +66,10 @@
             <div>
                 <p>부가세</p>
                 <v-radio-group row v-model="tax" @change="taxFunc">
-                <v-radio label="과세" value="tax1"></v-radio>
-                <v-radio label="면세" value="tax2"></v-radio>
-                <v-radio label="영세" value="tax3"></v-radio>
+                <v-radio label="과세" value="1"></v-radio>
+                <v-radio label="면세" value="3"></v-radio>
+                <v-radio label="영세" value="2"></v-radio>
+                <v-radio label="기타" value="0"></v-radio>
                 </v-radio-group>
             </div>
         </v-card>
@@ -85,7 +86,7 @@ export default {
             salePrice: "",
             point: "",
             originPrice: "",
-            tax: "tax1"
+            tax: "1"
         }
     },
     filters: {

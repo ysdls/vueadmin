@@ -24,11 +24,20 @@
             ></v-select>
             <v-text-field
                 type="number"
-                placeholder="배송기간을 입력하세요"
+                label="배송기간을 입력하세요"
                 clearable
                 persistentHint
                 v-model="deliveryRange"
                 @change="deliveryRangeFunc"
+            ></v-text-field>
+            <v-text-field
+                type="number"
+                label="배송비를 입력하세요"
+                clearable
+                persistentHint
+                v-model="deliveryPay"
+                v-show="deliveryPayShow"
+                @change="deliveryPayFunc"
             ></v-text-field>
             <v-checkbox label="도서산간 추가운임" v-model="mountain" @click="mountainFunc"></v-checkbox>
             <v-checkbox label="배송비 선결제" v-model="paygoahead" @click="paygoaheadFunc"></v-checkbox>
@@ -39,22 +48,26 @@
 export default {
     data() {
         return {
-            deliveryDefault:"무료",
-            deliveryFeeDefault:"무료",
+            deliveryDefault:1,
+            deliveryFeeDefault:1,
             deliveryRange:"3",
+            deliveryPay: 0,
             delivery: [
-                {"text":"무료", value:"무료"}, 
-                {"text":"퀵/화물", value:"퀵/화물"},
-                {"text":"배송없음", value:"배송없음"}
+                {"text":"기타", value:0}, 
+                {"text":"택배", value:1}, 
+                {"text":"퀵/화물", value:2},
+                {"text":"배송없음", value:3}
             ],
             deliveryFee: [
-                {"text":"무료", value:"무료"},
-                {"text":"고정배송비 사용", value:"고정배송비 사용"},
-                {"text":"구매금액에 따른부과", value:"구매금액에 따른부과"},
-                {"text":"상품 수량별 차등 배송료 사용", value:"상품 수량별 차등 배송료 사용"},
+                {"text":"기타", value:0},
+                {"text":"무료", value:1},
+                {"text":"고정배송비 사용", value:2},
+                {"text":"구매금액에 따른부과", value:3},
+                {"text":"상품 수량별 차등 배송료 사용", value:4},
             ],
             mountain: false,
-            paygoahead: false
+            paygoahead: false,
+            deliveryPayShow: false
         }
     },
     methods: {
@@ -63,6 +76,11 @@ export default {
         },
         deliveryFeeFunc(e) {
             this.$emit('delivery-fee-func-parent', e)
+            if ( e != 1) {
+                this.deliveryPayShow = true
+            } else {
+                this.deliveryPayShow = false
+            }
         },
         deliveryRangeFunc() {
             this.$emit('delivery-range-func-parent', this.deliveryRange)
@@ -72,7 +90,11 @@ export default {
         },
         paygoaheadFunc() {
             this.$emit('paygoahead-func-parent', this.paygoahead)
-        }
+        },
+        deliveryPayFunc() {
+            this.$emit('delivery-pay-func-parent', this.deliveryPay);
+        },
+        
     }
 }
 </script>

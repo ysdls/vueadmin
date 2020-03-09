@@ -45,7 +45,7 @@
                         <product-detail  :apiurl="apiurl" @model-func-parent="modelFuncParent" @brand-func-parent="brandFuncParent" @manufacture-func-parent="manufactureFuncParent" @origin-func-parent="originFuncParent" @supply-func-parent="supplyFuncParent" @picker-func-parent="pickerFuncParent" />
                     </v-col>
                     <v-col cols="12" md="6">
-                        <delivery @delivery-func-parent="deliveryFuncParent" @delivery-fee-func-parent="deliveryFeeFuncParent" @delivery-range-func-parent="deliveryRangeFuncParent" @mountain-func-parent="mountainFuncParent" @paygoahead-func-parent="paygoaheadFuncParent" />
+                        <delivery @delivery-func-parent="deliveryFuncParent" @delivery-fee-func-parent="deliveryFeeFuncParent" @delivery-range-func-parent="deliveryRangeFuncParent" @mountain-func-parent="mountainFuncParent" @paygoahead-func-parent="paygoaheadFuncParent" @delivery-pay-func-parent="deliveryPayFuncParent" />
                     </v-col>
                 </v-row>
             </v-col>
@@ -74,13 +74,13 @@ export default {
             apiurl: "https://dev-core.airsupply.kr",
             vaild: true,
             productName:null,  //제품명     
-            sellDate: null,        //판매기간  
-            price: 0,
-            salePrice: 0,
-            point:0,
-            originPrice: 0,    
-            deliveryData: "무료",     //배송구분
-            deliveryType: "무료",     //배송비 타입
+            sellDate: [],        //판매기간  
+            price: "",
+            salePrice: "",
+            point:"",
+            originPrice: "",    
+            deliveryData: 1,     //배송구분
+            deliveryType: 1,     //배송비 타입
             deliveryRange: 3,
             mountain: false,
             paygoahead: false,
@@ -89,19 +89,19 @@ export default {
             model:null,             //모델명
             brand:{
                 name:"",
-                value:null
+                value:""
             },
-            manufacture: null,
-            origin: null,
-            supply: null,
+            manufacture: "",
+            origin: "",
+            supply: "",
             datemanufac: new Date().toISOString().substr(0, 10),           //제조일자
             
             optionCheck: false,
             optionStock: 0,
             optionValue: null,
             optionInput: null,
-            tax:"tax1",
-            productImage: null,
+            tax:1,
+            productImage: [],
             detailInfo: null,
             
             topc: {
@@ -120,7 +120,8 @@ export default {
                 name:"",
                 value:null
             },
-            searchword:[]
+            searchword:[],
+            deliveryPay: 0
 
             
         }
@@ -207,6 +208,9 @@ export default {
         paygoaheadFuncParent(val) {
             this.paygoahead = val
         },
+        deliveryPayFuncParent(val) {
+            this.deliveryPay = val
+        },
         //옵션 체크 재고
         optionCheckParent(val) {
             this.optionCheck = val
@@ -263,26 +267,46 @@ export default {
             this.detailInfo = val
         },
         onSubmit() {
+            let pointKey = ""
+            let originPriceKey = ""
+            let brandKey = ""
+            let originKey = ""
+            let supplyKey = ""
             if ( this.optionCheck == false ) {
                 this.optionValue = null
                 this.optionInput = null
             } 
+            if ( this.point != "" ) {
+                pointKey = `this.point: ${this.point}`
+            }
+            if ( this.originPrice != "" ) {
+                originPriceKey = `this.originPrice: ${this.originPrice}`
+            }
+            if ( this.brand.value != "" ) {
+                brandKey = `this.brand: ${this.brand.value}`
+            }
+            if ( this.origin != "" ) {
+                originKey = `this.origin: ${this.origin}`
+            }
+            if ( this.supply != "" ) {
+                supplyKey = `this.supply: ${this.supply}`
+            }
             const data = {
                 product : {
                     productName: this.productName,  
                     model: this.model,            
-                    brand: this.brand.value,
-                    manufacture: this.manufacture,
-                    origin: this.origin,
-                    supply: this.supply,
+                    brandKey,
+                    manufacutrer: this.manufacture,
+                    originKey,
+                    supplyKey,
                     sellDate: this.sellDate,    //array
                     datemanufac: this.datemanufac, //0000-00-00
                 },
                 price: {
                     price: this.price,          //int
                     salePrice: this.salePrice,  //int
-                    point: this.point,          //int
-                    originPrice: this.originPrice,      //int
+                    pointKey,          //int
+                    originPriceKey,      //int
                     tax: this.tax,          //tax1,tax2,tax3
                 },
                 options: {
@@ -290,24 +314,37 @@ export default {
                     optionValue: this.optionValue,
                     optionInput: this.optionInput
                 },
-                data: {
-                    deliveryData: this.deliveryData,     
-                    deliveryType: this.deliveryType, 
-                    deliveryRange: this.deliveryRange,  //int
-                    mountain: this.mountain,            //bool
-                    paygoahead: this.paygoahead,        //bool
-                    minCount : this.minCount,           //int
+                delivery: {
+                    deliveryMethod: this.deliveryData,     
+                    deliveryFeeType: this.deliveryType, 
+                    deliveryDuration: this.deliveryRange,  //int
+                    deliveryFeeDetail: null,
+                    remoteDeliveryFee: this.mountain,            //bool
+                    prepay: this.paygoahead,        //bool
+                    minimumQuantity : this.minCount,           //int
                 },
                 info: {
                     productImage: this.productImage,
                     detailInfo: this.detailInfo,
                     category: [
-                        this.topc.value, this.middlec.value, this.bottomc.value, this.detailc.value
+                       this.bottomc.value
                     ],
                     search: this.searchword
                 }
             }
-            console.log(JSON.stringify(data));
+ 
+            this.$axios.post(`${this.apiurl}/erp/product/`, data ,{
+                'headers': {
+                    'Content-Type': "application/json;charset=utf-8;",
+                    'Authorization' : "token a4f797d9efbdae9d5aef894c2aa4c54621435471"
+                }
+            })
+            .then(r=> {
+                console.log('success', r);
+            })
+            .catch(e=> {
+                console.log(e.response);
+            })
         },
         remove (item) {
             this.searchword.splice(this.searchword.indexOf(item), 1)

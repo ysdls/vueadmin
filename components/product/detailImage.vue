@@ -46,8 +46,7 @@ export default {
                 }
                 })
                 .then(r=> {
-                    console.log('success', r);
-                    this.file.push(r.data.image)
+                    this.file.push(r.data.id)
                 })
                 .catch(e=> {
                     console.log('error');
