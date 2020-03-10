@@ -80,8 +80,10 @@ export default {
 
     data() {
         return {
+            // apiurl: "https://dev-core.airsupply.kr",
+            // token: "76835e8cdaf24d399f4c4b0468e33a6ec03d71c9",
             apiurl: "https://dev-core.airsupply.kr",
-            token: "a4f797d9efbdae9d5aef894c2aa4c54621435471",
+            token: "31f63e11335088f441b4880c48057ffa53092953",
             vaild: true,
             productName:null,  //제품명     
             sellDate: [],        //판매기간  
@@ -343,25 +345,25 @@ export default {
                     memo: this.memo
                 }
             }
-            console.log(data)
-            // this.$axios.post(`${this.apiurl}/erp/product/`, data ,{
-            //     'headers': {
-            //         'Content-Type': "application/json;charset=utf-8;",
-            //         'Authorization' : `token ${this.token}`
-            //     }
-            // })
-            // .then(r=> {
-            //     if (r.data.result == true) {
-            //         alert("업로드가 완료되었습니다")
-            //         window.location.reload()
-            //     } else {
-            //         alert('필수입력값을 확인해주세요')
-            //     }
+ 
+            this.$axios.post(`${this.apiurl}/erp/product/`, data ,{
+                'headers': {
+                    'Content-Type': "application/json;charset=utf-8;",
+                    'Authorization' : `token ${this.token}`
+                }
+            })
+            .then(r=> {
+                if (r.data.result == true) {
+                    alert("업로드가 완료되었습니다")
+                    window.location.reload()
+                } else {
+                    alert('필수입력값을 확인해주세요')
+                }
                 
-            // })
-            // .catch(e=> {
-            //     console.log(e.response);
-            // })
+            })
+            .catch(e=> {
+                console.log(e.response);
+            })
         },
         remove (item) {
             this.searchword.splice(this.searchword.indexOf(item), 1)

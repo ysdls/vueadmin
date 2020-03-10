@@ -5,7 +5,7 @@
         elevation="1"
         class="cardSection"
         >
-            <div class="subtitle-2">상품이미지</div>
+            <div class="subtitle-2">상품이미지*</div>
             <v-file-input accept="image/*" show-size multiple  label="첫번째 선택한 이미지가 메인이미지가 됩니다." @change="fileupload($event)">
             <template v-slot:selection="{ index, text }">
                 <v-chip
@@ -24,7 +24,8 @@
 <script>
 export default {
     props : {
-        apiurl:String
+        apiurl:String,
+        token:String
     },
     data() {
         return {
@@ -42,7 +43,7 @@ export default {
                 this.$axios.post(`${this.apiurl}/erp/image/`, form,{
                 'headers': {
                     'Content-Type': "multipart/form-data;charset=utf-8;",
-                    'Authorization' : "token a4f797d9efbdae9d5aef894c2aa4c54621435471"
+                    'Authorization' : `token ${this.token}`
                 }
                 })
                 .then(r=> {

@@ -1,9 +1,11 @@
 <template>
     <!-- App.vue -->
     <v-app>
-        <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
+        <v-navigation-drawer v-model="drawer">
+            <!-- :clipped="$vuetify.breakpoint.lgAndUp" app -->
             <v-list dense>
-                <template v-for="item in items">
+                <a href="/product/add">상품추가</a>
+                <!-- <template v-for="item in items">
                     <v-list-group
                         v-if="item.children"
                         :key="item.text"
@@ -47,7 +49,7 @@
                         </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                </template>
+                </template> -->
             </v-list>
         </v-navigation-drawer>
 
@@ -85,36 +87,36 @@ export default {
         return {
             drawer: null,
             items: [
-                { icon: 'mdi-contacts', text: 'Contacts' },
-                { icon: 'mdi-history', text: 'Frequently contacted' },
-                { icon: 'mdi-content-copy', text: 'Duplicates' },
-                {
-                    icon: 'mdi-chevron-up',
-                    'icon-alt': 'mdi-chevron-down',
-                    text: 'Labels',
-                    model: true,
-                    children: [
-                        { icon: 'mdi-plus', text: 'Create label' },
-                    ],
-                },
-                {
-                icon: 'mdi-chevron-up',
-                'icon-alt': 'mdi-chevron-down',
-                text: 'More',
-                model: false,
-                children: [
-                    { text: 'Import' },
-                    { text: 'Export' },
-                    { text: 'Print' },
-                    { text: 'Undo changes' },
-                    { text: 'Other contacts' },
-                ],
-                },
-                { icon: 'mdi-settings', text: 'Settings' },
-                { icon: 'mdi-message', text: 'Send feedback' },
-                { icon: 'mdi-help-circle', text: 'Help' },
-                { icon: 'mdi-cellphone-link', text: 'App downloads' },
-                { icon: 'mdi-keyboard', text: 'Go to the old version' },
+                { icon: 'mdi-contacts', text: '상품추가', link: "/product/add" },
+                // { icon: 'mdi-history', text: 'Frequently contacted' },
+                // { icon: 'mdi-content-copy', text: 'Duplicates' },
+                // {
+                //     icon: 'mdi-chevron-up',
+                //     'icon-alt': 'mdi-chevron-down',
+                //     text: 'Labels',
+                //     model: true,
+                //     children: [
+                //         { icon: 'mdi-plus', text: 'Create label' },
+                //     ],
+                // },
+                // {
+                // icon: 'mdi-chevron-up',
+                // 'icon-alt': 'mdi-chevron-down',
+                // text: 'More',
+                // model: false,
+                // children: [
+                //     { text: 'Import' },
+                //     { text: 'Export' },
+                //     { text: 'Print' },
+                //     { text: 'Undo changes' },
+                //     { text: 'Other contacts' },
+                // ],
+                // },
+                // { icon: 'mdi-settings', text: 'Settings' },
+                // { icon: 'mdi-message', text: 'Send feedback' },
+                // { icon: 'mdi-help-circle', text: 'Help' },
+                // { icon: 'mdi-cellphone-link', text: 'App downloads' },
+                // { icon: 'mdi-keyboard', text: 'Go to the old version' },
             ],
         }
     }

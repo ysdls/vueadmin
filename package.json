@@ -15,7 +15,8 @@
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/pwa": "^3.0.0-0",
     "nuxt": "^2.0.0",
-    "vue-quill-editor": "^3.0.6"
+    "vue-quill-editor": "^3.0.6",
+    "xlsx": "^0.15.5"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0"

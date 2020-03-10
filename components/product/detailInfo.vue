@@ -5,7 +5,7 @@
         elevation="1"
         class="cardSection"
         >
-            <div class="subtitle-2">상세정보</div>
+            <div class="subtitle-2">상세정보*</div>
             <div class="quill-editor" :content="content" @change="onEditorChange($event)" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" v-quill:myQuillEditor="editorOption" ref="quillEdit" style="height:300px;"></div>
             <input type="file" @change="uploadFunction" id="file" hidden>
         </v-card>
@@ -14,7 +14,8 @@
 <script>
 export default {
     props : {
-        apiurl:String
+        apiurl:String,
+        token:String
     },
     data() {
         return {
@@ -62,7 +63,7 @@ export default {
             this.$axios.post(`${this.apiurl}/erp/image/`, form,{
                 'headers': {
                     'Content-Type': "multipart/form-data;charset=utf-8;",
-                    'Authorization' : "token a4f797d9efbdae9d5aef894c2aa4c54621435471"
+                    'Authorization' : `token ${this.token}`
                 }
             })
             .then(r=> {

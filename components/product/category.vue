@@ -5,7 +5,7 @@
     elevation="1"
     class="cardSection"
     >
-        <div class="subtitle-2">카테고리</div>
+        <div class="subtitle-2">카테고리*</div>
         <v-row>
             <v-col cols="12" sm="3">
                 <v-autocomplete
@@ -46,7 +46,7 @@
                 ></v-autocomplete>
             </v-col>
 
-            <v-col cols="12" sm="3">
+            <!-- <v-col cols="12" sm="3">
                 <v-autocomplete
                 :items="detail"
                 label="세분류"
@@ -57,15 +57,17 @@
                 dense
                  @change="detailFunc($event)"
                 ></v-autocomplete>
-            </v-col>
+            </v-col> -->
         </v-row>
+        <div class="subtitle-2">세번째 카테고리까지 필수로 선택하셔야합니다*</div>
     </v-card>
 </template>
 
 <script>
 export default {
     props : {
-        apiurl:String
+        apiurl:String,
+        token:String
     },
     data() {
         return {
@@ -81,7 +83,7 @@ export default {
         await this.$axios.get(`${this.apiurl}/erp/category`, {
                 'headers': {
                     'Content-Type': "Content-Type: application/json; charset=utf-8",
-                    'Authorization' : "token a4f797d9efbdae9d5aef894c2aa4c54621435471"
+                    'Authorization' : `token ${this.token}`
                 }
             })
             .then(r=> {
@@ -104,7 +106,7 @@ export default {
             await this.$axios.get(`${this.apiurl}/erp/category/?category_id=${e}`, {
                 'headers': {
                     'Content-Type': "Content-Type: application/json; charset=utf-8",
-                    'Authorization' : "token a4f797d9efbdae9d5aef894c2aa4c54621435471"
+                    'Authorization' : `token ${this.token}`
                 }
             })
             .then(r=> {
@@ -129,7 +131,7 @@ export default {
             await this.$axios.get(`${this.apiurl}/erp/category/?category_id=${e}`, {
                 'headers': {
                     'Content-Type': "Content-Type: application/json; charset=utf-8",
-                    'Authorization' : "token a4f797d9efbdae9d5aef894c2aa4c54621435471"
+                    'Authorization' : `token ${this.token}`
                 }
             })
             .then(r=> {
@@ -154,7 +156,7 @@ export default {
             await this.$axios.get(`${this.apiurl}/erp/category/?category_id=${e}`, {
                 'headers': {
                     'Content-Type': "Content-Type: application/json; charset=utf-8",
-                    'Authorization' : "token a4f797d9efbdae9d5aef894c2aa4c54621435471"
+                    'Authorization' : `token ${this.token}`
                 }
             })
             .then(r=> {

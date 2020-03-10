@@ -24,7 +24,7 @@
                 <v-col cols="12" md="6">
                     <v-text-field
                         type="number"
-                        label="할인가"
+                        label="할인가*"
                         hint="할인가를 입력하시면 할인된 가격으로 판매됩니다. 할인 미적용시 입력하지마세요"
                         placeholder="할인가격을 숫자로 입력하세요"
                         suffix="원"

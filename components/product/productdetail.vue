@@ -137,7 +137,8 @@
 <script>
 export default {
     props : {
-        apiurl:String
+        apiurl:String,
+        token:String
     },
     data() {
         return {
@@ -159,7 +160,7 @@ export default {
         await this.$axios.get(`${this.apiurl}/erp/product/option/`, {
                 'headers': {
                     'Content-Type': "Content-Type: application/json; charset=utf-8",
-                    'Authorization' : "token a4f797d9efbdae9d5aef894c2aa4c54621435471"
+                    'Authorization' : `token ${this.token}`
                 }
             })
             .then(r=> {
@@ -229,7 +230,7 @@ export default {
             this.$axios.post(`${this.apiurl}/erp/product/option/`, form,{
                 'headers': {
                     'Content-Type': "Content-Type: application/json; charset=utf-8",
-                    'Authorization' : "token a4f797d9efbdae9d5aef894c2aa4c54621435471"
+                    'Authorization' : `token ${this.token}`
                 }
             })
             .then(r=> {
