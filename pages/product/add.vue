@@ -343,25 +343,24 @@ export default {
                     memo: this.memo
                 }
             }
-            console.log(data)
-            // this.$axios.post(`${this.apiurl}/erp/product/`, data ,{
-            //     'headers': {
-            //         'Content-Type': "application/json;charset=utf-8;",
-            //         'Authorization' : `token ${this.token}`
-            //     }
-            // })
-            // .then(r=> {
-            //     if (r.data.result == true) {
-            //         alert("업로드가 완료되었습니다")
-            //         window.location.reload()
-            //     } else {
-            //         alert('필수입력값을 확인해주세요')
-            //     }
-                
-            // })
-            // .catch(e=> {
-            //     console.log(e.response);
-            // })
+            // console.log(data)
+            this.$axios.post(`${this.apiurl}/erp/product/`, data ,{
+                'headers': {
+                    'Content-Type': "application/json;charset=utf-8;",
+                    'Authorization' : `token ${this.token}`
+                }
+            })
+            .then(r=> {
+                if (r.data.result == true) {
+                    alert("업로드가 완료되었습니다")
+                    window.location.reload()
+                } else {
+                    alert('필수입력값을 확인해주세요')
+                }
+            })
+            .catch(e=> {
+                console.log(e.response);
+            })
         },
         remove (item) {
             this.searchword.splice(this.searchword.indexOf(item), 1)
@@ -378,4 +377,3 @@ export default {
     margin-bottom: 20px;
 }
 </style>
-

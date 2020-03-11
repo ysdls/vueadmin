@@ -23,12 +23,14 @@
                 </v-col>
 
             </v-row>
-            <optionAdd v-show="optionDetail" @option-value-default-parent="optionValueDefaultParent" @option-value-input-parent="optionValueInputParent" />
+            <optionTable v-show="optionDetail" @option-value-default-parent="optionValueDefaultParent" @option-value-input-parent="optionValueInputParent" />
+            
         </v-card>
 </template>
 
 <script>
 import optionAdd from "~/components/product/optionAdd.vue";
+import optionTable from "~/components/product/optionTable.vue";
 
 export default {
     data() {
@@ -43,6 +45,7 @@ export default {
     },
     components: {
         optionAdd,
+        optionTable
     },
     methods: {
         optionCheckFunc() {
