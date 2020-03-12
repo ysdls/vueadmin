@@ -1,8 +1,8 @@
 <template>
     <!-- App.vue -->
     <v-app>
-        <v-navigation-drawer v-model="drawer">
-            <!-- :clipped="$vuetify.breakpoint.lgAndUp" app -->
+        <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
+            <!--  -->
             <v-list dense>
                 <a href="/product/add">상품추가</a>
                 <!-- <template v-for="item in items">

@@ -1,115 +1,93 @@
 <template>
-  <v-container fluid>
-    <v-combobox
-      v-model="model"
-      :filter="filter"
-      :hide-no-data="!search"
-      :items="items"
-      :search-input.sync="search"
-      hide-selected
-      label="Search for an option"
-      multiple
-      small-chips
-      solo
-    >
-      <template v-slot:selection="{ attrs, item, parent, selected }">
-        <v-chip
-          v-if="item === Object(item)"
-          v-bind="attrs"
-          :color="`${item.color} lighten-3`"
-          :input-value="selected"
-          label
-          small
-        >
-          <span class="pr-2">
-            {{ item.text }}
-          </span>
-          <v-icon
-            small
-            @click="parent.selectItem(item)"
-          >close</v-icon>
-        </v-chip>
-      </template>
-
-    </v-combobox>
-  </v-container>
+<div @drop="_drop" @dragenter="_suppress" @dragover="_suppress">
+	<div class="row"><div class="col-xs-12">
+		<form class="form-inline">
+			<div class="form-group">
+				<label for="file">Spreadsheet</label>
+				<input type="file" class="form-control" id="file" :accept="SheetJSFT" @change="_change" />
+			</div>
+		</form>
+	</div></div>
+	<!-- <div class="row"><div class="col-xs-12">
+		<button :disabled="data.length ? false : true" class="btn btn-success" @click="_export">Export</button>
+	</div></div> -->
+	<div class="row"><div class="col-xs-12">
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead><tr>
+					<th v-for="c in cols" :key="c.key">{{c.name}}</th>
+				</tr></thead>
+				<tbody>
+					<tr v-for="(r, key) in data" :key="key">
+						<td v-for="c in cols" :key="c.key"> {{ r[c.key] }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div></div>
+</div>
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      activator: null,
-      attach: null,
-      colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
-      editing: null,
-      index: -1,
-      items: [
-        { header: 'Select an option or create one' },
-        {
-          text: 'Foo',
-          color: 'blue',
-        },
-        {
-          text: 'Bar',
-          color: 'red',
-        },
-      ],
-      nonce: 1,
-      menu: false,
-      model: [
-        {
-          text: 'Foo',
-          color: 'blue',
-        },
-      ],
-      x: 0,
-      search: null,
-      y: 0,
-    }),
+import XLSX from 'xlsx';
 
-    watch: {
-      model (val, prev) {
-        if (val.length === prev.length) return
-
-        this.model = val.map(v => {
-          if (typeof v === 'string') {
-            v = {
-              text: v,
-              color: this.colors[this.nonce - 1],
-            }
-
-            this.items.push(v)
-
-            this.nonce++
-          }
-
-          return v
-        })
-      },
-    },
-
-    methods: {
-      edit (index, item) {
-        if (!this.editing) {
-          this.editing = item
-          this.index = index
-        } else {
-          this.editing = null
-          this.index = -1
-        }
-      },
-      filter (item, queryText, itemText) {
-        if (item.header) return false
-
-        const hasValue = val => val != null ? val : ''
-
-        const text = hasValue(itemText)
-        const query = hasValue(queryText)
-
-        return text.toString()
-          .toLowerCase()
-          .indexOf(query.toString().toLowerCase()) > -1
-      },
-    },
-  }
+const make_cols = refstr => Array(XLSX.utils.decode_range(refstr).e.c + 1).fill(0).map((x,i) => ({name:XLSX.utils.encode_col(i), key:i}));
+const _SheetJSFT = [
+	"xlsx", "xlsb", "xlsm", "xls", "xml", "csv", "txt", "ods", "fods", "uos", "sylk", "dif", "dbf", "prn", "qpw", "123", "wb*", "wq*", "html", "htm"
+].map(function(x) { return "." + x; }).join(",");
+export default {
+	data() {
+		return {
+			data: ["SheetJS".split(""), "1234567".split("")],
+			cols: [
+				{name:"A", key:0},
+				{name:"B", key:1},
+				{name:"C", key:2},
+				{name:"D", key:3},
+				{name:"E", key:4},
+				{name:"F", key:5},
+				{name:"G", key:6},
+			],
+			SheetJSFT: _SheetJSFT
+	}; },
+	methods: {
+		_suppress(evt) { evt.stopPropagation(); evt.preventDefault(); },
+		_drop(evt) {
+			evt.stopPropagation(); evt.preventDefault();
+			const files = evt.dataTransfer.files;
+			if(files && files[0]) this._file(files[0]);
+		},
+		_change(evt) {
+			const files = evt.target.files;
+      if(files && files[0]) this._file(files[0]);
+      console.log(files);
+		},
+		_export(evt) {
+			/* convert state to workbook */
+			const ws = XLSX.utils.aoa_to_sheet(this.data);
+			const wb = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
+			/* generate file and send to client */
+			XLSX.writeFile(wb, "sheetjs.xlsx");
+		},
+		_file(file) {
+			/* Boilerplate to set up FileReader */
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				/* Parse data */
+				const bstr = e.target.result;
+				const wb = XLSX.read(bstr, {type:'binary'});
+				/* Get first worksheet */
+				const wsname = wb.SheetNames[0];
+				const ws = wb.Sheets[wsname];
+				/* Convert array of arrays */
+				const data = XLSX.utils.sheet_to_json(ws, {header:1});
+				/* Update state */
+				this.data = data;
+				this.cols = make_cols(ws['!ref']);
+			};
+			reader.readAsBinaryString(file);
+		}
+	}
+};
 </script>
