@@ -277,46 +277,20 @@ export default {
             this.detailInfo = val
         },
         onSubmit() {
-            let pointKey = ""
-            let originPriceKey = ""
-            let brandKey = ""
-            let originKey = ""
-            let supplyKey = ""
             if ( this.optionCheck == false ) {
                 this.optionValue = null
                 this.optionInput = null
             } 
-            if ( this.point != "" ) {
-                pointKey = `this.point: ${this.point}`
-            }
-            if ( this.originPrice != "" ) {
-                originPriceKey = `this.originPrice: ${this.originPrice}`
-            }
-            if ( this.brand.value != "" ) {
-                brandKey = `this.brand: ${this.brand.value}`
-            }
-            if ( this.origin != "" ) {
-                originKey = `this.origin: ${this.origin}`
-            }
-            if ( this.supply != "" ) {
-                supplyKey = `this.supply: ${this.supply}`
-            }
-            const data = {
+            let data = {
                 product : {
                     productName: this.productName,  
                     model: this.model,            
-                    brandKey,
-                    manufacutrer: this.manufacture,
-                    originKey,
-                    supplyKey,
                     sellDate: this.sellDate,    //array
                     datemanufac: this.datemanufac, //0000-00-00
                 },
                 price: {
                     price: this.price,          //int
                     salePrice: this.salePrice,  //int
-                    pointKey,          //int
-                    originPriceKey,      //int
                     tax: this.tax,          //tax1,tax2,tax3
                 },
                 options: {
@@ -343,7 +317,25 @@ export default {
                     memo: this.memo
                 }
             }
-            // console.log(data)
+            if ( this.point != "" ) {
+                data.price.point = this.point  
+            }
+            if ( this.originPrice != "" ) {
+                data.price.originPrice = this.originPrice
+            }
+            if ( this.brand.value != "" ) {
+                data.product.brand =  this.brand.value
+            }
+            if ( this.manufacture != "" ) {
+                data.product.manufacturer = this.manufacture
+            }
+            if ( this.supply != "" ) {
+                data.product.supply = this.supply
+            }
+            if ( this.origin != "" ) {
+                data.product.origin = this.origin
+            }
+            //console.log(this.productImage);
             this.$axios.post(`${this.apiurl}/erp/product/`, data ,{
                 'headers': {
                     'Content-Type': "application/json;charset=utf-8;",
@@ -356,6 +348,7 @@ export default {
                     window.location.reload()
                 } else {
                     alert('필수입력값을 확인해주세요')
+                    console.log(r);
                 }
             })
             .catch(e=> {
