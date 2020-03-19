@@ -91,11 +91,9 @@ export default {
                         minimumQuantity : this.data[i][5],           //int
                     },
                     info: {
-                        productImage: ["5d01238c-786f-4049-b48a-de5ce3a3da73"],
                         detailInfo: this.data[i][21],
                         category: [1],
-                        search: [ this.data[i][20] ],
-                        memo: ""
+                        memo: "",
                     }
                 }
                 //원산지
@@ -111,9 +109,17 @@ export default {
                 if ( this.data[i][22] != undefined ) {
                     data.delivery.deliveryFeeDetail = this.data[i][22]  //배송비
                 }
-                // if ( this.data[i][10] != undefined ) {
-                //     data.delivery.deliveryFeeDetail = this.data[i][22]  //배송비
-                // }
+                let obj = []
+                for ( let j=10; j<18; j++) {
+                    if ( this.data[i][j] != undefined ) {
+                        obj.push( this.data[i][j] )
+                    }
+                }
+                data.info.productImageUrl = obj
+                if ( this.data[i][20] != undefined ) {
+                    let word = this.data[i][20].split(",")
+                    data.info.search =  word
+                }
                 //console.log(this.data[i][6]);
                 let option = []
                 if( this.data[i][6] != undefined ) {
@@ -140,7 +146,7 @@ export default {
                         console.log("error");
                     }
                 }
-                console.log(data);
+                //console.log(data);
                 this.$axios.post(`${this.apiurl}/erp/product/`, data ,{
                     'headers': {
                         'Content-Type': "application/json;charset=utf-8;",
@@ -155,6 +161,7 @@ export default {
                     //     alert('필수입력값을 확인해주세요')
                     //     console.log(r);
                     // }
+                    console.log(r);
 
                 })
                 .catch(e=> {
@@ -191,7 +198,8 @@ export default {
 			};
 			reader.readAsBinaryString(file);
         },
-  
+
+    
     }
 }
 </script>
