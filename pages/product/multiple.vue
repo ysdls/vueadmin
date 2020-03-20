@@ -55,6 +55,8 @@ export default {
         return {
             apiurl: "https://dev-core.airsupply.kr",
             token: "a4f797d9efbdae9d5aef894c2aa4c54621435471",
+            // apiurl: "https://core.airsupply.kr",
+            // token: "1cdcd1ef0c508a48d80f10c6d9d43eabac29b635",
             SheetJSFT: _SheetJSFT,
             data: [],
             cols: [],
@@ -63,6 +65,7 @@ export default {
     },
     methods: {
         onSubmit() {
+            let result = ""
             for( let i=0; i<this.data.length; i++) {
                 let data = {
                     product : {
@@ -118,7 +121,7 @@ export default {
                 data.info.productImageUrl = obj
                 if ( this.data[i][20] != undefined ) {
                     let word = this.data[i][20].split(",")
-                    data.info.search =  word
+                    data.info.search = word
                 }
                 //console.log(this.data[i][6]);
                 let option = []
@@ -143,10 +146,10 @@ export default {
                         })
                         data.options.optionValue = option
                     } else {
-                        console.log("error");
+                        console.log("옵션 에러");
                     }
                 }
-                //console.log(data);
+//                console.log(data);
                 this.$axios.post(`${this.apiurl}/erp/product/`, data ,{
                     'headers': {
                         'Content-Type': "application/json;charset=utf-8;",
@@ -154,13 +157,6 @@ export default {
                     }
                 })
                 .then(r=> {
-                    // if (r.data.result == true) {
-                    //     alert("업로드가 완료되었습니다")
-                    //     window.location.reload()
-                    // } else {
-                    //     alert('필수입력값을 확인해주세요')
-                    //     console.log(r);
-                    // }
                     console.log(r);
 
                 })
@@ -168,7 +164,6 @@ export default {
                     console.log(e.response);
                 })
             }
-            
         },
         _change(evt) {
 			// const files = evt.target.files;

@@ -82,6 +82,8 @@ export default {
         return {
             apiurl: "https://dev-core.airsupply.kr",
             token: "a4f797d9efbdae9d5aef894c2aa4c54621435471",
+            // apiurl: "https://core.airsupply.kr",
+            // token: "1cdcd1ef0c508a48d80f10c6d9d43eabac29b635",
             vaild: true,
             productName:null,  //제품명     
             sellDate: [],        //판매기간  
@@ -302,7 +304,7 @@ export default {
                     deliveryMethod: this.deliveryData,     
                     deliveryFeeType: this.deliveryType, 
                     deliveryDuration: this.deliveryRange,  //int
-                    deliveryFeeDetail: null,
+                    deliveryFeeDetail: this.deliveryPay,
                     remoteDeliveryFee: this.mountain,            //bool
                     prepay: this.paygoahead,        //bool
                     minimumQuantity : this.minCount,           //int
@@ -335,7 +337,7 @@ export default {
             if ( this.origin != "" ) {
                 data.product.origin = this.origin
             }
-            //console.log(this.productImage);
+//            console.log(data);
             this.$axios.post(`${this.apiurl}/erp/product/`, data ,{
                 'headers': {
                     'Content-Type': "application/json;charset=utf-8;",

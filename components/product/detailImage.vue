@@ -7,14 +7,18 @@
         >
             <div class="subtitle-2">상품이미지*</div>
             <v-file-input accept="image/*" show-size multiple  label="첫번째 선택한 이미지가 메인이미지가 됩니다." @change="fileupload($event)">
-            <template v-slot:selection="{ index, text }">
+            <template v-slot:selection="{ attrs, index, text, item, select, selected }">
                 <v-chip
                     color="deep-purple accent-4"
                     dark
                     label
                     small
+                    close
+                    v-bind="attrs"
+                    :input-value="selected"
+                    @click:close="close(index)"
                 >
-                    {{ text }}
+                    {{ item }}
                 </v-chip>
                 </template>
             </v-file-input>
@@ -34,7 +38,7 @@ export default {
     },
     methods: {
         fileupload(e) {
- 
+            this.file = []
             for(let i=0; i < e.length; i++) {
                 
                 let form = new FormData();
@@ -54,7 +58,8 @@ export default {
                 })
                                 
             }
-            this.$emit("product-image-func-parent", this.file)
+            //this.$emit("product-image-func-parent", this.file)
+            console.log(this.file);
 
             // for (var key of form.keys()) {
             //     console.log(key);
@@ -64,6 +69,14 @@ export default {
             // }
 
             
+        },
+        close(item) {
+            console.log(item);
+            this.file.splice(item, 1)
+            this.file = [...this.file]
+
+                        console.log([...this.file]);
+
         }
     }
 }
