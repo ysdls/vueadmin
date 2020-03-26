@@ -5,6 +5,7 @@
             <!--  -->
             <v-list dense>
                 <a href="/product/add">상품추가</a>
+                <a href="/product/multiple">일괄업로드</a>
                 <!-- <template v-for="item in items">
                     <v-list-group
                         v-if="item.children"

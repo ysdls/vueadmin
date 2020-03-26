@@ -10,8 +10,8 @@
                 <v-col cols="12" md="6">
                     <v-text-field
                         type="number"
-                        label="판매가*"
-                        placeholder="판매가를 숫자로 입력하세요"
+                        label="정상가*"
+                        placeholder="정상가를 숫자로 입력하세요"
                         hint="숫자만 가능합니다"
                         suffix="원"
                         :rules="rules.priceCheck"
@@ -24,11 +24,13 @@
                 <v-col cols="12" md="6">
                     <v-text-field
                         type="number"
-                        label="할인가*"
-                        hint="할인가를 입력하시면 할인된 가격으로 판매됩니다. 할인 미적용시 입력하지마세요"
-                        placeholder="할인가격을 숫자로 입력하세요"
+                        label="실제판매가*"
+                        hint="몰에서 실제로 판매될 가격을 입력하세요"
+                        placeholder="실제 판매가격을 숫자로 입력하세요"
+                        :rules="rules.saleCheck"
                         suffix="원"
                         clearable
+                        required
                         persistentHint
                         v-model="salePrice"
                         @change="saleFunc"
@@ -80,7 +82,8 @@ export default {
     data() {
         return {
             rules: {
-                priceCheck: [value => !!value || '필수입력']
+                priceCheck: [value => !!value || '필수입력'],
+                saleCheck: [value => !!value || '필수입력']
             },
             price: "",
             salePrice: "",

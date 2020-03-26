@@ -67,7 +67,7 @@ export default {
                 }
             })
             .then(r=> {
-                console.log('success');
+                console.log(r);
                 const range = this.editor.getSelection()
                 this.editor.insertEmbed(range.index, 'image',  r.data.image);
             })

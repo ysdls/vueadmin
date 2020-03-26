@@ -94,7 +94,7 @@ export default {
             deliveryData: 1,     //배송구분
             deliveryType: 1,     //배송비 타입
             deliveryRange: 3,
-            mountain: false,
+            mountain: true,
             paygoahead: false,
             
             minCount : 1,        //최소구매수량
@@ -302,12 +302,13 @@ export default {
                 },
                 delivery: {
                     deliveryMethod: this.deliveryData,     
-                    deliveryFeeType: this.deliveryType, 
+                    deliveryFeeType : this.deliveryType, 
                     deliveryDuration: this.deliveryRange,  //int
-                    deliveryFeeDetail: this.deliveryPay,
+                    // deliveryFeeDetail:this.deliveryPay,
                     remoteDeliveryFee: this.mountain,            //bool
                     prepay: this.paygoahead,        //bool
                     minimumQuantity : this.minCount,           //int
+                    
                 },
                 info: {
                     productImage: this.productImage,
@@ -337,7 +338,11 @@ export default {
             if ( this.origin != "" ) {
                 data.product.origin = this.origin
             }
-//            console.log(data);
+            if (  this.deliveryType == 2 ) {
+                data.delivery.deliveryFeeDetail = {
+                    fixed_fee : parseInt(this.deliveryPay)
+                }               
+            }
             this.$axios.post(`${this.apiurl}/erp/product/`, data ,{
                 'headers': {
                     'Content-Type': "application/json;charset=utf-8;",

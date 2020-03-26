@@ -70,13 +70,13 @@ export default {
                 let data = {
                     product : {
                         productName: this.data[i][0],  
-                        model: this.data[i][18],            
+                        model: this.data[i][19],            
                         sellDate: [],    //array
                         datemanufac: new Date().toISOString().substr(0, 10), //0000-00-00
                     },
                     price: {
-                        price: this.data[i][1],          //int
-                        salePrice: this.data[i][2],  //int
+                        price: this.data[i][2],          //int
+                        salePrice: this.data[i][3],  //int
                         tax: 1
                     },  
                     options: {
@@ -85,61 +85,86 @@ export default {
                         optionInput: null
                     },
                     delivery: {
-                        deliveryMethod: 1,     
-                        deliveryFeeType: 1, 
+                        deliveryMethod: this.data[i][26],       //배송구분
+                        deliveryFeeType: this.data[i][27],      //배송비 타입
                         deliveryDuration: 3,  //int
-                        deliveryFeeDetail: 0,
-                        remoteDeliveryFee: false,            //bool
+                        remoteDeliveryFee: true,            //bool
                         prepay: false,        //bool
-                        minimumQuantity : this.data[i][5],           //int
+                        minimumQuantity : this.data[i][6],           //int
                     },
                     info: {
-                        detailInfo: this.data[i][21],
-                        category: [1],
+                        detailInfo: this.data[i][25],
                         memo: "",
                     }
                 }
-                //원산지
-                if ( this.data[i][19] != undefined) {
-                    data.product.origin = this.data[i][19]
-                }
+                //공급가
                 if ( this.data[i][4] != undefined ) {
-                    data.price.point = this.data[i][4]
+                    data.price.originPrice = this.data[i][4]
                 }
-                if ( this.data[i][3] != undefined ) {
-                    data.price.originPrice = this.data[i][3]
+                //적립금
+                if ( this.data[i][5] != undefined ) {
+                    data.price.point = this.data[i][5]
                 }
-                if ( this.data[i][22] != undefined ) {
-                    data.delivery.deliveryFeeDetail = this.data[i][22]  //배송비
+                //브랜드
+                if ( this.data[i][20] != undefined) {
+                    data.product.brand = this.data[i][20]
                 }
+                //제조사
+                if ( this.data[i][21] != undefined) {
+                    data.product.manufacturer = this.data[i][21]
+                }
+                //공급사
+                if ( this.data[i][22] != undefined) {
+                    data.product.supply = this.data[i][22]
+                }
+                //원산지
+                if ( this.data[i][23] != undefined) {
+                    data.product.origin = this.data[i][23]
+                }
+                //검색어
+                if ( this.data[i][24] != undefined ) {
+                    let word = this.data[i][24].split(",")
+                    data.info.search = word
+                }
+                if ( this.data[i][27] == 2 ) {
+                    data.delivery.deliveryFeeDetail = {
+                        fixed_fee : parseInt(this.data[i][28])
+                    }  
+                }
+                //상품 이미지
                 let obj = []
-                for ( let j=10; j<18; j++) {
+                for ( let j=11; j<19; j++) {
                     if ( this.data[i][j] != undefined ) {
                         obj.push( this.data[i][j] )
                     }
                 }
                 data.info.productImageUrl = obj
-                if ( this.data[i][20] != undefined ) {
-                    let word = this.data[i][20].split(",")
-                    data.info.search = word
+                //카테고리
+                if ( this.data[i][1] != undefined ) {
+                    let str = String(this.data[i][1])
+                    if ( str.indexOf(",") != -1 ) {
+                        data.info.category = str.split(",")
+                    } else {
+                        data.info.category = [this.data[i][1]]
+                    }
                 }
-                //console.log(this.data[i][6]);
+                //옵션 설정
                 let option = []
-                if( this.data[i][6] != undefined ) {
+                if( this.data[i][7] != undefined ) {
                     let optionElement = ""
-                    if ( this.data[i][7] != undefined ) {
-                        let optionValue = this.data[i][7].split(",")
+                    if ( this.data[i][8] != undefined ) {
+                        let optionValue = this.data[i][8].split(",")
                         optionValue.map(el => {
-                            if( this.data[i][8] != undefined ) {
-                                if ( this.data[i][9] != undefined ) {
-                                    let optionValue2 = this.data[i][9].split(",")
+                            if( this.data[i][9] != undefined ) {
+                                if ( this.data[i][10] != undefined ) {
+                                    let optionValue2 = this.data[i][10].split(",")
                                     optionValue2.map(el2 => {
-                                        optionElement = `${this.data[i][6]}=${el}_${this.data[i][8]}=${el2}_999_S_0`
+                                        optionElement = `${this.data[i][7]}=${el}_${this.data[i][9]}=${el2}_999_S_0`
                                         option.push(optionElement)
                                     })
                                 }
                             } else {
-                                optionElement = `${this.data[i][6]}=${el}_999_S_0`
+                                optionElement = `${this.data[i][7]}=${el}_999_S_0`
                                 option.push(optionElement)
                             }
                            
@@ -149,7 +174,7 @@ export default {
                         console.log("옵션 에러");
                     }
                 }
-//                console.log(data);
+ //               console.log(data);
                 this.$axios.post(`${this.apiurl}/erp/product/`, data ,{
                     'headers': {
                         'Content-Type': "application/json;charset=utf-8;",
